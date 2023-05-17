@@ -1,6 +1,3 @@
-/**
- * 
- */
 package club.minimunch57.enums;
 
 /**

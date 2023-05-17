@@ -1,7 +1,10 @@
+# Folders
 target/
 bin/
 .settings/
 .idea/
+
+# Misc. Files
 .classpath
 .project
 CHANGELOG.txt

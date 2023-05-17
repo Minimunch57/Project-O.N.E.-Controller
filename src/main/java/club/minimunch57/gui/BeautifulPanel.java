@@ -62,19 +62,19 @@ public class BeautifulPanel extends JPanel {
 		this(30);
 	}
 	
-    @Override
+	@Override
     protected void paintComponent(Graphics g) {
-    	super.paintComponent(g);
-    	
-    	//	Create Graphics and Rendering Hints
+		super.paintComponent(g);
+		
+		//	Create Graphics and Rendering Hints
 		Graphics2D g2d = (Graphics2D) g.create();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		//	Draw the Rounded Drop Shadow
 		for (int i = 0; i < shadowSize; i++) {
-            g2d.setColor(new Color(0, 0, 0, (int) (( 10.0 / shadowSize) * i)));
+			g2d.setColor(new Color(0, 0, 0, (int) (( 10.0 / shadowSize) * i)));
             g2d.fillRoundRect(i, i, this.getWidth() - ((i * 2) + 1), this.getHeight() - (i * 2), 90, 90);
-        }
+		}
 		
 		//	Draw the Rounded Panel
 		g2d.setColor(getBackground());
@@ -82,5 +82,5 @@ public class BeautifulPanel extends JPanel {
 		
 		//	Dispose of the Graphics2D Object
 		g2d.dispose();
-    }
+	}
 }
