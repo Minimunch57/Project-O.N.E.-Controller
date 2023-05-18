@@ -12,6 +12,8 @@ import javax.swing.SwingConstants;
 
 /**
  * 
+ * A prettier JButton with rounded edges and multiple colors.
+ * 
  * @author Matthew Whitney
  *
  */

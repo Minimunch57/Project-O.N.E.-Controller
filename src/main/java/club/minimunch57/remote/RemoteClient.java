@@ -16,7 +16,6 @@ import com.neovisionaries.ws.client.WebSocketState;
 import club.minimunch57.gui.ControllerInterface;
 import club.minimunch57.listeners.MessageListener;
 
-
 /**
  * 
  * A slightly altered version of the remote client used in the Project O.N.E. local system.

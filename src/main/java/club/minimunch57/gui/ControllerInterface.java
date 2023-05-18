@@ -364,12 +364,12 @@ public class ControllerInterface extends JFrame {
 	 * </ul>
 	 */
 	private void addTextToPane(String text, String styleName) {
-        if(textPane.getText().length()<1) {
-        	appendTextToPane(text, styleName);
-        }
-        else {
-        	appendTextToPane("\n" + text, styleName);
-        }
+		if(textPane.getText().length()<1) {
+			appendTextToPane(text, styleName);
+		}
+		else {
+			appendTextToPane("\n" + text, styleName);
+		}
 	}
 	
 	/**
