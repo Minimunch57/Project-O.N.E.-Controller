@@ -134,6 +134,16 @@ public class RemoteClient {
 				else if(message.startsWith("#connection")) {
 					messageListener.connectionMessageReceived(message.replaceFirst("#connection=", "").trim());
 				}
+				else if(message.startsWith("#command")) {
+					final String trimmedMessage = message.replaceFirst("#command=", "").trim();
+					if(trimmedMessage.startsWith("notification:")) {
+						messageListener.notificationReceived(trimmedMessage.replaceFirst("notification:", ""));
+					}
+					else {
+						// Unknown or Unhandled Command
+						messageListener.messageReceived(message);
+					}
+				}
 				else if(message.startsWith("#response")) {
 					message = message.replaceFirst("#response=", "").trim();
 					

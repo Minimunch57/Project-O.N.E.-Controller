@@ -33,7 +33,7 @@ public class Controller {
 	
 	//	Static Return Values
 	/** A <code>float</code> for the current controller version. */
-	final public static String CURRENT_VERSION = "1.3.1";
+	final public static String CURRENT_VERSION = "1.3.2";
 	/** A <tt>String</tt> for the path to the application's file folder. */
 	@SuppressWarnings("unused")
 	final private static String APP_FOLDER_PATH = System.getProperty("user.home") + "/Minimunch57/ProjectONEController/";
@@ -202,6 +202,15 @@ public class Controller {
 						System.out.println("!C:" + connectionMessage);
 					}
 				}
+				
+				@Override
+				public void notificationReceived(String notificationMessage) {
+					if(notificationMessage.toUpperCase().startsWith("POKE")) {
+						trayIcon.displayMessage("Poke Received!", notificationMessage.toUpperCase(), MessageType.NONE);
+						notificationMessage = "Poke!";
+					}
+					System.out.println("!N:" + notificationMessage);
+				}
 
 				@Override
 				public void responseMessageReceived(String responseMessage) {
@@ -255,6 +264,11 @@ public class Controller {
 			case SYSTEM_LOCK: {
 				remoteClient.sendMessage("#command=!security:system:lock");
 				System.out.println("> SENT --> System Lock");
+				break;
+			}
+			case POKE: {
+				remoteClient.sendMessage("#command=notification:poke");
+				System.out.println("> SENT --> Poke");
 				break;
 			}
 			case CONNECT: {

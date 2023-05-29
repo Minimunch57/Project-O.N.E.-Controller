@@ -297,6 +297,9 @@ public class ControllerInterface extends JFrame {
 					else if(text.trim().startsWith("!C:")) {
 						addTextToPane("Connection Message from Server: " + text.replaceFirst("!C:", ""), "server");
 					}
+					else if(text.trim().startsWith("!N:")) {
+						addTextToPane("Notification from Server: " + text.replaceFirst("!N:", ""), "server");
+					}
 					else if(text.trim().startsWith("!R:")) {
 						addTextToPane("Response from Server: " + text.replaceFirst("!R:", ""), "server");
 					}
@@ -427,6 +430,9 @@ public class ControllerInterface extends JFrame {
 			else if(commandArgs != null && commandArgs[0].equalsIgnoreCase("LOCK")) {
 				sysCommand = ONECommand.SYSTEM_LOCK;
 			}
+		}
+		else if(command.equals("POKE")) {
+			sysCommand = ONECommand.POKE;
 		}
 		else if(command.equals("CONNECT")) {
 			sysCommand = ONECommand.CONNECT;

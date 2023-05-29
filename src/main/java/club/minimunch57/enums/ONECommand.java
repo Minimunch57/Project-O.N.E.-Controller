@@ -46,6 +46,15 @@ public enum ONECommand {
 	
 	/**
 	 * <ul>
+	 * 	<p> <b><i>POKE</i></b>
+	 * 	<p>	The command for poking (notifying) any active client/controller users.
+	 *  <p> It is unlikely to have use in the opposite direction (Client --> System).
+	 * </ul>
+	 */
+	POKE,
+	
+	/**
+	 * <ul>
 	 * 	<p>	<b><i>CONNECT</i></b>
 	 * 	<p> The command for connecting to the server.
 	 * </ul>

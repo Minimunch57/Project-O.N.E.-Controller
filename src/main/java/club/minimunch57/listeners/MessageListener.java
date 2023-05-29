@@ -48,6 +48,18 @@ public interface MessageListener extends EventListener {
 	
 	/**
 	 * <ul>
+	 * <p>	<b><i>notificationReceived</i></b>
+	 * <p>	<code>public void notificationReceived(String notificationMessage)</code>
+	 * <p>	An interface method that invokes upon receiving a notification message from the server.
+	 * <p>	This method takes a <tt>String</tt> containing the notification message sent by the server.
+	 * <p>	<b>Note:</b> The passed notification message contains solely the content and has the type prefix removed from the <tt>String</tt>.
+	 * @param notificationMessage - a <tt>String</tt> containing the notification message sent by the server.
+	 * </ul>
+	 */
+	public void notificationReceived(String notificationMessage);
+	
+	/**
+	 * <ul>
 	 * <p>	<b><i>responseMessageReceived</i></b>
 	 * <p>	<code>public void responseMessageReceived(String responseMessage)</code>
 	 * <p>	An interface method that invokes upon receiving a response message from the server.
