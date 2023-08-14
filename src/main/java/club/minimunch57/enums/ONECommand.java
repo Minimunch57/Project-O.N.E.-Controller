@@ -46,6 +46,22 @@ public enum ONECommand {
 	
 	/**
 	 * <ul>
+	 * 	<p>	<b><i>MANUALUNLOCKS_DISABLE</i></b>
+	 * 	<p>	The command for disabling manual unlocks on the system.
+	 * </ul>
+	 */
+	MANUALUNLOCKS_DISABLE,
+	
+	/**
+	 * <ul>
+	 * 	<p>	<b><i>MANUALUNLOCKS_ENABLE</i></b>
+	 * 	<p>	The command for enabling manual unlocks on the system.
+	 * </ul>
+	 */
+	MANUALUNLOCKS_ENABLE,
+	
+	/**
+	 * <ul>
 	 * 	<p> <b><i>POKE</i></b>
 	 * 	<p>	The command for poking (notifying) any active client/controller users.
 	 *  <p> It is unlikely to have use in the opposite direction (Client --> System).

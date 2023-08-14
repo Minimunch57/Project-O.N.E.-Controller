@@ -11,11 +11,19 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.RunnableFuture;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -64,6 +72,8 @@ public class ControllerInterface extends JFrame {
 	private BeautifulButton sendButton;
 	
 	//	Various Objects
+	/** The <tt>EntryLogger</tt> used to log and retrieve previous command/text entries in the GUI. */
+	private EntryLogger entryLogger;
 	/** The <tt>RequestListener</tt> used to send requests. */
 	private RequestListener requestListener = null;
 	
@@ -84,6 +94,11 @@ public class ControllerInterface extends JFrame {
 	 * </ul>
 	 */
 	public ControllerInterface() {
+		//	Asynchronous Parts of Setup
+		CompletableFuture.runAsync(() -> {
+			entryLogger = new EntryLogger();
+		});
+		
 		//	Register Font
 		try {
 			final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -124,7 +139,10 @@ public class ControllerInterface extends JFrame {
 		openButton.setFont(textFont);
 		openButton.setBounds(43, 41, 150, 100);
 		openButton.addActionListener((actionEvent) -> {
-			requestListener.commandRequested(ONECommand.OPEN, null);
+			//	Handle request asynchronously.
+			CompletableFuture.runAsync(() -> {
+				requestListener.commandRequested(ONECommand.OPEN, null);
+			});
 		});
 		contentPane.add(openButton);
 		
@@ -135,7 +153,10 @@ public class ControllerInterface extends JFrame {
 		closeButton.setFont(textFont);
 		closeButton.setBounds(203, 41, 150, 100);
 		closeButton.addActionListener((actionEvent) -> {
-			requestListener.commandRequested(ONECommand.CLOSE, null);
+			//	Handle request asynchronously.
+			CompletableFuture.runAsync(() -> {
+				requestListener.commandRequested(ONECommand.CLOSE, null);
+			});
 		});
 		contentPane.add(closeButton);
 		
@@ -146,7 +167,10 @@ public class ControllerInterface extends JFrame {
 		unlockButton.setFont(textFont);
 		unlockButton.setBounds(43, 152, 150, 100);
 		unlockButton.addActionListener((actionEvent) -> {
-			requestListener.commandRequested(ONECommand.SYSTEM_UNLOCK, null);
+			//	Handle request asynchronously.
+			CompletableFuture.runAsync(() -> {
+				requestListener.commandRequested(ONECommand.SYSTEM_UNLOCK, null);
+			});
 		});
 		contentPane.add(unlockButton);
 		
@@ -157,7 +181,10 @@ public class ControllerInterface extends JFrame {
 		lockButton.setFont(textFont);
 		lockButton.setBounds(203, 152, 150, 100);
 		lockButton.addActionListener((actionEvent) -> {
-			requestListener.commandRequested(ONECommand.SYSTEM_LOCK, null);
+			//	Handle request asynchronously.
+			CompletableFuture.runAsync(() -> {
+				requestListener.commandRequested(ONECommand.SYSTEM_LOCK, null);
+			});
 		});
 		contentPane.add(lockButton);
 		
@@ -222,6 +249,23 @@ public class ControllerInterface extends JFrame {
 		textField.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 		textField.setHorizontalAlignment(JTextField.LEADING);
 		textField.setBounds(43, 366, 255, 40);
+		textField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent ke) {
+				//	Grab the Next Oldest Text Field Entry
+				if(ke.getKeyCode() == KeyEvent.VK_UP) {
+					if(entryLogger.hasEntries()) {
+						textField.setText(entryLogger.retrievePrevious(textField.getText()));
+					}
+				}
+				//	Grab the Next Newest Text Field Entry
+				else if(ke.getKeyCode() == KeyEvent.VK_DOWN) {
+					if(entryLogger.hasEntries()) {
+						textField.setText(entryLogger.retrieveFollowing());
+					}
+				}
+			}
+		});
 		textField.addActionListener((actionEvent) -> {
 			sendButton.getActionListeners()[0].actionPerformed(actionEvent);
 		});
@@ -234,10 +278,15 @@ public class ControllerInterface extends JFrame {
 		sendButton.setFont(textFont.deriveFont(Font.BOLD, 18));
 		sendButton.setBounds(308, 366, 45, 40);
 		sendButton.addActionListener((actionEvent) -> {
-			if(textField.getText().trim().length()>0) {
-				parseTextInput(textField.getText());
-				SwingUtilities.invokeLater(() -> {
-					textField.setText("");
+			final String currentText = textField.getText();
+			//	Ensure that text entry contains at least some non-space character(s).
+			if(currentText.trim().length() > 0) {
+				textField.setText("");
+				
+				//	Parse asynchronously.
+				CompletableFuture.runAsync(() -> {
+					entryLogger.log(currentText);
+					parseTextInput(currentText);
 				});
 			}
 		});
@@ -246,6 +295,31 @@ public class ControllerInterface extends JFrame {
 		//	Register Text Styles for the Text Pane
 		registerTextStyles();
 		rerouteConsolePrints();
+	}
+	
+	/**
+	 * <ul>
+	 * <p>	<b><i>getTextFrom</i></b>
+	 * <p>	<code>private String getTextFrom(final Callable c)</code>
+	 * @param <S> the type of the <tt>Callable</tt>'s output.
+	 * @param c - the <tt>Callable</tt> to run and retrieve a <tt>String</tt> from.
+	 * @return a <tt>String</tt> with the text returned from the passed <tt>Callable</tt>; <code>null</code> otherwise if the <tt>Callable</tt> fails.
+	 * </ul>
+	 */
+	private <S> String getTextFrom(final Callable<S> c) {
+		final RunnableFuture<S> runnableF = new FutureTask<>(c);
+		if(SwingUtilities.isEventDispatchThread()) {
+			runnableF.run();
+		} else {
+			SwingUtilities.invokeLater(runnableF);
+		}
+		
+		try {
+			return (String) runnableF.get();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/**
@@ -367,7 +441,7 @@ public class ControllerInterface extends JFrame {
 	 * </ul>
 	 */
 	private void addTextToPane(String text, String styleName) {
-		if(textPane.getText().length()<1) {
+		if(getTextFrom(() -> textPane.getText()).length() < 1) {
 			appendTextToPane(text, styleName);
 		}
 		else {
@@ -408,8 +482,11 @@ public class ControllerInterface extends JFrame {
 		String[] commandArgs = null;
 		final int spaceIndex = text.indexOf(' ');
 		if(spaceIndex != -1) {
+			//	Change command to be all text before the first space.
 			command = text.substring(0, spaceIndex).toUpperCase();
+			//	Split the text by the spaces, then convert each argument to full uppercase.
 			commandArgs = text.substring(spaceIndex + 1).split(" ");
+			commandArgs = Arrays.asList(commandArgs).stream().map(a -> a.toUpperCase()).toArray(String[]::new);
 		}
 		
 		//	Create unset enums then match a command if available.
@@ -423,12 +500,28 @@ public class ControllerInterface extends JFrame {
 		else if(command.equals("CLOSE") || command.equals("LOCK")) {
 			sysCommand = ONECommand.CLOSE;
 		}
-		else if(command.equals("SYSTEM")) {
-			if(commandArgs != null && commandArgs[0].equalsIgnoreCase("UNLOCK")) {
+		else if(command.equals("SYSTEM") && commandArgs != null) {
+			if(commandArgs[0].equals("UNLOCK")) {
 				sysCommand = ONECommand.SYSTEM_UNLOCK;
 			}
-			else if(commandArgs != null && commandArgs[0].equalsIgnoreCase("LOCK")) {
+			else if(commandArgs[0].equals("LOCK")) {
 				sysCommand = ONECommand.SYSTEM_LOCK;
+			}
+		}
+		else if(command.equals("MANUAL") && commandArgs != null && commandArgs[0].equals("UNLOCKS") && commandArgs.length > 1) {
+			if(commandArgs[1].equals("ENABLE")) {
+				sysCommand = ONECommand.MANUALUNLOCKS_ENABLE;
+			}
+			else if(commandArgs[1].equals("DISABLE")) {
+				sysCommand = ONECommand.MANUALUNLOCKS_DISABLE;
+			}
+		}
+		else if(command.equals("MU") && commandArgs != null) {
+			if(commandArgs[0].equals("ENABLE")) {
+				sysCommand = ONECommand.MANUALUNLOCKS_ENABLE;
+			}
+			else if(commandArgs[0].equals("DISABLE")) {
+				sysCommand = ONECommand.MANUALUNLOCKS_DISABLE;
 			}
 		}
 		else if(command.equals("POKE")) {
@@ -454,6 +547,9 @@ public class ControllerInterface extends JFrame {
 		else if(command.equals("GC")) {
 			conCommand = ControllerCommand.GC;
 		}
+		else if(command.equals("CLEAR")) {
+			conCommand = ControllerCommand.CLEAR;
+		}
 		
 		//	Make request based on results.
 		if(sysCommand != null) {
@@ -465,6 +561,19 @@ public class ControllerInterface extends JFrame {
 		else {
 			requestListener.messageRequested(text);
 		}
+	}
+	
+	/**
+	 * <ul>
+	 * <p>	<b><i>clearConsole</i></b>
+	 * <p>	<code>public void clearConsole()</code>
+	 * <p>	Clears the <tt>JTextPane</tt> text output/console window, making it completely blank.
+	 * </ul>
+	 */
+	public void clearConsole() {
+		SwingUtilities.invokeLater(() -> {
+			textPane.setText("");
+		});
 	}
 	
 	/**

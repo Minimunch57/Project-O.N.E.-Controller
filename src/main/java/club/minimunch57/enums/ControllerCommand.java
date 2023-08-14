@@ -22,5 +22,13 @@ public enum ControllerCommand {
 	 * 	<p> The controller command for calling upon the Java garbage collector.
 	 * </ul>
 	 */
-	GC
+	GC,
+	
+	/**
+	 * <ul>
+	 * 	<p>	<b><i>CLEAR</i></b>
+	 * 	<p>	The controller command for clearing the text output/console window.
+	 * </ul>
+	 */
+	CLEAR
 }

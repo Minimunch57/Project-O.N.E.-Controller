@@ -9,9 +9,11 @@ import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -33,7 +35,7 @@ public class Controller {
 	
 	//	Static Return Values
 	/** A <code>float</code> for the current controller version. */
-	final public static String CURRENT_VERSION = "1.3.2";
+	final public static String CURRENT_VERSION = "1.4.0";
 	/** A <tt>String</tt> for the path to the application's file folder. */
 	@SuppressWarnings("unused")
 	final private static String APP_FOLDER_PATH = System.getProperty("user.home") + "/Minimunch57/ProjectONEController/";
@@ -55,8 +57,14 @@ public class Controller {
 	 * </ul>
 	 */
 	public Controller() {
-		//	Create controller interface.
-		controllerGUI = new ControllerInterface();
+		//	Create controller interface and request listener.
+		try {
+			SwingUtilities.invokeAndWait(() -> {
+				controllerGUI = new ControllerInterface();
+			});
+		} catch (InvocationTargetException | InterruptedException e) {
+			e.printStackTrace();
+		}
 		setupRequestListener();
 		
 		//	Connect to the server.
@@ -266,6 +274,16 @@ public class Controller {
 				System.out.println("> SENT --> System Lock");
 				break;
 			}
+			case MANUALUNLOCKS_DISABLE: {
+				remoteClient.sendMessage("#command=!security:manualunlocks:disable");
+				System.out.println("> SENT --> Disable Manual Unlocks");
+				break;
+			}
+			case MANUALUNLOCKS_ENABLE: {
+				remoteClient.sendMessage("#command=!security:manualunlocks:enable");
+				System.out.println("> SENT --> Enable Manual Unlocks");
+				break;
+			}
 			case POKE: {
 				remoteClient.sendMessage("#command=notification:poke");
 				System.out.println("> SENT --> Poke");
@@ -328,6 +346,11 @@ public class Controller {
 				//	Call the garbage collector in an effort to free up some memory.
 				case GC: {
 					System.gc();
+					break;
+				}
+				//	Clear the output text/console window.
+				case CLEAR: {
+					controllerGUI.clearConsole();
 					break;
 				}
 				default:
