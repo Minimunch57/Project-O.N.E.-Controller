@@ -30,5 +30,13 @@ public enum ControllerCommand {
 	 * 	<p>	The controller command for clearing the text output/console window.
 	 * </ul>
 	 */
-	CLEAR
+	CLEAR,
+	
+	/**
+	 * <ul>
+	 * 	<p>	<b><i>VERSION</i></b>
+	 * 	<p>	The controller command for getting the current application version.
+	 * </ul>
+	 */
+	VERSION
 }

@@ -41,7 +41,9 @@ import javax.swing.text.StyledDocument;
 
 import club.minimunch57.enums.ControllerCommand;
 import club.minimunch57.enums.ONECommand;
+import club.minimunch57.enums.TextStyle;
 import club.minimunch57.listeners.RequestListener;
+import club.minimunch57.main.Controller;
 
 /**
  * 
@@ -251,7 +253,7 @@ public class ControllerInterface extends JFrame {
 		textField.setBounds(43, 366, 255, 40);
 		textField.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyReleased(KeyEvent ke) {
+			public void keyPressed(KeyEvent ke) {
 				//	Grab the Next Oldest Text Field Entry
 				if(ke.getKeyCode() == KeyEvent.VK_UP) {
 					if(entryLogger.hasEntries()) {
@@ -335,15 +337,15 @@ public class ControllerInterface extends JFrame {
 		final StyledDocument styledDocument = textPane.getStyledDocument();
 		
 		//	Console Error Text Style
-		Style adjustedStyle = styledDocument.addStyle("console-error", defaultStyle);
+		Style adjustedStyle = styledDocument.addStyle(TextStyle.CONSOLE_ERROR.name(), defaultStyle);
 		adjustedStyle.addAttribute(StyleConstants.Foreground, Color.RED);
 		
 		//	Standard Text Style
-		adjustedStyle = styledDocument.addStyle("text", defaultStyle);
+		adjustedStyle = styledDocument.addStyle(TextStyle.TEXT.name(), defaultStyle);
 		adjustedStyle.addAttribute(StyleConstants.Foreground, Color.DARK_GRAY);
 		
 		//	Server Text Style
-		adjustedStyle = styledDocument.addStyle("server", defaultStyle);
+		adjustedStyle = styledDocument.addStyle(TextStyle.SERVER.name(), defaultStyle);
 		adjustedStyle.addAttribute(StyleConstants.Foreground, Color.GRAY);
 	}
 	
@@ -363,25 +365,25 @@ public class ControllerInterface extends JFrame {
 				final String text = new String(buffer, offset, length);
 				if (text.trim().length() > 0) {
 					if(text.trim().startsWith("!M:")) {
-						addTextToPane("Message from Server: " + text.replaceFirst("!M:", ""), "server");
+						addTextToPane("Message from Server: " + text.replaceFirst("!M:", ""), TextStyle.SERVER);
 					}
 					else if(text.trim().startsWith("!B:")) {
-						addTextToPane("Broadcast from Server: " + text.replaceFirst("!B:", ""), "server");
+						addTextToPane("Broadcast from Server: " + text.replaceFirst("!B:", ""), TextStyle.SERVER);
 					}
 					else if(text.trim().startsWith("!C:")) {
-						addTextToPane("Connection Message from Server: " + text.replaceFirst("!C:", ""), "server");
+						addTextToPane("Connection Message from Server: " + text.replaceFirst("!C:", ""), TextStyle.SERVER);
 					}
 					else if(text.trim().startsWith("!N:")) {
-						addTextToPane("Notification from Server: " + text.replaceFirst("!N:", ""), "server");
+						addTextToPane("Notification from Server: " + text.replaceFirst("!N:", ""), TextStyle.SERVER);
 					}
 					else if(text.trim().startsWith("!R:")) {
-						addTextToPane("Response from Server: " + text.replaceFirst("!R:", ""), "server");
+						addTextToPane("Response from Server: " + text.replaceFirst("!R:", ""), TextStyle.SERVER);
 					}
 					else if(text.trim().startsWith("!ERR:")) {
-						addTextToPane(text.replaceFirst("!ERR:", ""), "console-error");
+						addTextToPane(text.replaceFirst("!ERR:", ""), TextStyle.CONSOLE_ERROR);
 					}
 					else {
-						addTextToPane(text, "text");
+						addTextToPane(text, TextStyle.TEXT);
 					}
 				}
 			}
@@ -396,9 +398,9 @@ public class ControllerInterface extends JFrame {
 			public void write(byte[] buffer, int offset, int length) throws IOException {
 				final String text = new String(buffer, offset, length);
 				if (text.startsWith("Exception")) {
-					addTextToPane(text, "console-error");
+					addTextToPane(text, TextStyle.CONSOLE_ERROR);
 				} else {
-					appendTextToPane(text, "console-error");
+					appendTextToPane(text, TextStyle.CONSOLE_ERROR);
 				}
 			}
 
@@ -414,16 +416,16 @@ public class ControllerInterface extends JFrame {
 	/**
 	 * <ul>
 	 * <p>	<b><i>appendTextToPane</i></b>
-	 * <p>	<code>private void appendTextToPane(String text, String styleName)</code>
+	 * <p>	<code>private void appendTextToPane(String text, TextStyle style)</code>
 	 * <p>	Appends the passed <code>text</code> to the <tt>JTextPane</tt> under the specified style.
 	 * @param text - a <tt>String</tt> with the text to append.
-	 * @param styleName - a <tt>String</tt> for the name of the style to use when appending the text.
+	 * @param style - a <tt>TextStyle</tt> for the text style to use when appending the text.
 	 * </ul>
 	 */
-	private void appendTextToPane(String text, String styleName) {
+	private void appendTextToPane(String text, TextStyle style) {
 		SwingUtilities.invokeLater(() -> {
 			try {
-				textPane.getStyledDocument().insertString(textPane.getStyledDocument().getLength(), text, textPane.getStyledDocument().getStyle(styleName));
+				textPane.getStyledDocument().insertString(textPane.getStyledDocument().getLength(), text, textPane.getStyledDocument().getStyle(style.name()));
 			} catch (BadLocationException ble) {
 				ble.printStackTrace();
 			}
@@ -434,18 +436,18 @@ public class ControllerInterface extends JFrame {
 	/**
 	 * <ul>
 	 * <p>	<b><i>addTextToPane</i></b>
-	 * <p>	<code>private void addTextToPane(String text, String styleName)</code>
+	 * <p>	<code>private void addTextToPane(String text, TextStyle style)</code>
 	 * <p>	Adds the passed <code>text</code> to the <tt>JTextPane</tt> under the specified style in a new line.
-	 * @param text - the text to add.
-	 * @param styleName - a <tt>String</tt> for the name of the style to use when appending the text.
+	 * @param text - a <tt>String</tt> with the text to add.
+	 * @param style - a <tt>TextStyle</tt> for the text style to use when adding the text.
 	 * </ul>
 	 */
-	private void addTextToPane(String text, String styleName) {
+	private void addTextToPane(String text, TextStyle style) {
 		if(getTextFrom(() -> textPane.getText()).length() < 1) {
-			appendTextToPane(text, styleName);
+			appendTextToPane(text, style);
 		}
 		else {
-			appendTextToPane("\n" + text, styleName);
+			appendTextToPane("\n" + text, style);
 		}
 	}
 	
@@ -475,7 +477,7 @@ public class ControllerInterface extends JFrame {
 	private void parseTextInput(String text) {
 		//	Trim spaces off of the ends then add text to pane.
 		text = text.trim();
-		addTextToPane("> " + text, "text");
+		addTextToPane("> " + text, TextStyle.TEXT);
 
 		//	Determine command arguments (if any).
 		String command = text.toUpperCase();
@@ -549,6 +551,10 @@ public class ControllerInterface extends JFrame {
 		}
 		else if(command.equals("CLEAR")) {
 			conCommand = ControllerCommand.CLEAR;
+		}
+		else if(command.equals("VERSION")) {
+			conCommand = ControllerCommand.VERSION;
+			addTextToPane("Controller Version: " + Controller.CURRENT_VERSION, TextStyle.TEXT);
 		}
 		
 		//	Make request based on results.
