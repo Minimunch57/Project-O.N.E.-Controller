@@ -35,7 +35,7 @@ public class Controller {
 	
 	//	Static Return Values
 	/** A <code>float</code> for the current controller version. */
-	final public static String CURRENT_VERSION = "1.4.1";
+	final public static String CURRENT_VERSION = "1.4.2";
 	/** A <tt>String</tt> for the path to the application's file folder. */
 	@SuppressWarnings("unused")
 	final private static String APP_FOLDER_PATH = System.getProperty("user.home") + "/Minimunch57/ProjectONEController/";

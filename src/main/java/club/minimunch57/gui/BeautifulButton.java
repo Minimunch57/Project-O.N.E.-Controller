@@ -27,6 +27,9 @@ public class BeautifulButton extends JButton {
 	/** A set of <tt>Color</tt>s used to make the background gradient for each <tt>BeautifulButton</tt> when it is pressed. */
 	private Color colorTopPressed = colorTop.darker(), colorBottomPressed = colorBottom.darker();
 	
+	/** A <code>boolean</code> for whether or not this <tt>BeautifulButton</tt> should have thicker borders. Default is <code>true</code>. */
+	private boolean thickBorders = true;
+	
 	/**
 	 * <ul>
 	 * <p>	<b><i>BeautifulButton</i></b>
@@ -91,8 +94,14 @@ public class BeautifulButton extends JButton {
 		
 		//	Draws the Rounded Border
 		g2d.setColor(colorBottom);
-		g2d.setStroke(new BasicStroke(5.0f));
-		g2d.drawRoundRect(2, 2, getWidth()-5, getHeight()-5, 20, 20);
+		if(thickBorders) {
+			g2d.setStroke(new BasicStroke(5.0f));
+			g2d.drawRoundRect(2, 2, getWidth()-5, getHeight()-5, 20, 20);
+		}
+		else {
+			g2d.setStroke(new BasicStroke(3.0f));
+			g2d.drawRoundRect(1, 1, getWidth()-3, getHeight()-3, 20, 20);
+		}
 		
 		//	Dispose of the Graphics2D Object
 		g2d.dispose();
@@ -130,6 +139,18 @@ public class BeautifulButton extends JButton {
 	public void setBackgroundColorsPressed(Color colorOnePressed, Color colorTwoPressed) {
 		colorTopPressed = colorOnePressed;
 		colorBottomPressed = colorTwoPressed;
+	}
+	
+	/**
+	 * <ul>
+	 * <p>	<b><i>setThickBorders</i></b>
+	 * <p>	<code>public void setThickBorders(boolean thick)</code>
+	 * <p>	Sets whether or not this <tt>BeautifulButton</tt> should be drawn with thick borders.
+	 * @param thick - a <code>boolean</code> for whether or not this <tt>BeautifulButton</tt> should have thick borders.
+	 * </ul>
+	 */
+	public void setThickBorders(boolean thick) {
+		thickBorders = thick;
 	}
 	
 	/**

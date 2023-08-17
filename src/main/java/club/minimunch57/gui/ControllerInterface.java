@@ -139,7 +139,7 @@ public class ControllerInterface extends JFrame {
 		openButton.setFocusPainted(false);
 		openButton.setForeground(Color.WHITE);
 		openButton.setFont(textFont);
-		openButton.setBounds(43, 41, 150, 100);
+		openButton.setBounds(45, 42, 150, 100);
 		openButton.addActionListener((actionEvent) -> {
 			//	Handle request asynchronously.
 			CompletableFuture.runAsync(() -> {
@@ -153,7 +153,7 @@ public class ControllerInterface extends JFrame {
 		closeButton.setFocusPainted(false);
 		closeButton.setForeground(Color.WHITE);
 		closeButton.setFont(textFont);
-		closeButton.setBounds(203, 41, 150, 100);
+		closeButton.setBounds(205, 42, 150, 100);
 		closeButton.addActionListener((actionEvent) -> {
 			//	Handle request asynchronously.
 			CompletableFuture.runAsync(() -> {
@@ -166,8 +166,9 @@ public class ControllerInterface extends JFrame {
 		unlockButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		unlockButton.setFocusPainted(false);
 		unlockButton.setForeground(Color.WHITE);
-		unlockButton.setFont(textFont);
-		unlockButton.setBounds(43, 152, 150, 100);
+		unlockButton.setFont(textFont.deriveFont((float) 22));
+		unlockButton.setThickBorders(false);
+		unlockButton.setBounds(45, 153, 150, 47);
 		unlockButton.addActionListener((actionEvent) -> {
 			//	Handle request asynchronously.
 			CompletableFuture.runAsync(() -> {
@@ -180,8 +181,9 @@ public class ControllerInterface extends JFrame {
 		lockButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lockButton.setFocusPainted(false);
 		lockButton.setForeground(Color.WHITE);
-		lockButton.setFont(textFont);
-		lockButton.setBounds(203, 152, 150, 100);
+		lockButton.setFont(textFont.deriveFont((float) 22));
+		lockButton.setThickBorders(false);
+		lockButton.setBounds(45, 206, 150, 47);
 		lockButton.addActionListener((actionEvent) -> {
 			//	Handle request asynchronously.
 			CompletableFuture.runAsync(() -> {
@@ -189,6 +191,36 @@ public class ControllerInterface extends JFrame {
 			});
 		});
 		contentPane.add(lockButton);
+		
+		BeautifulButton manualEnableButton = new BeautifulButton("Enable", new Color(87, 255, 28), new Color(38, 162, 0));
+		manualEnableButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		manualEnableButton.setFocusPainted(false);
+		manualEnableButton.setForeground(Color.WHITE);
+		manualEnableButton.setFont(textFont.deriveFont((float) 22));
+		manualEnableButton.setThickBorders(false);
+		manualEnableButton.setBounds(205, 153, 150, 47);
+		manualEnableButton.addActionListener((actionEvent) -> {
+			//	Handle request asynchronously.
+			CompletableFuture.runAsync(() -> {
+				requestListener.commandRequested(ONECommand.MANUALUNLOCKS_ENABLE, null);
+			});
+		});
+		contentPane.add(manualEnableButton);
+		
+		BeautifulButton manualDisableButton = new BeautifulButton("Disable", new Color(254, 32, 42), new Color(161, 0, 4));
+		manualDisableButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		manualDisableButton.setFocusPainted(false);
+		manualDisableButton.setForeground(Color.WHITE);
+		manualDisableButton.setFont(textFont.deriveFont((float) 22));
+		manualDisableButton.setThickBorders(false);
+		manualDisableButton.setBounds(205, 206, 150, 47);
+		manualDisableButton.addActionListener((actionEvent) -> {
+			//	Handle request asynchronously.
+			CompletableFuture.runAsync(() -> {
+				requestListener.commandRequested(ONECommand.MANUALUNLOCKS_DISABLE, null);
+			});
+		});
+		contentPane.add(manualDisableButton);
 		
 		textPane = new JTextPane();
 		textPane.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
@@ -223,7 +255,7 @@ public class ControllerInterface extends JFrame {
 		scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0,0));
 		scrollPane.getHorizontalScrollBar().setPreferredSize(new Dimension(0,0));
 		scrollPane.setFocusable(false);
-		scrollPane.setBounds(43, 263, 310, 92);
+		scrollPane.setBounds(45, 264, 310, 92);
 		contentPane.add(scrollPane);
 		
 		textField = new JTextField() {
@@ -250,7 +282,7 @@ public class ControllerInterface extends JFrame {
 		textField.setFont(textFont.deriveFont(Font.PLAIN, 16));
 		textField.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 		textField.setHorizontalAlignment(JTextField.LEADING);
-		textField.setBounds(43, 366, 255, 40);
+		textField.setBounds(45, 367, 255, 40);
 		textField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent ke) {
@@ -278,7 +310,8 @@ public class ControllerInterface extends JFrame {
 		sendButton.setFocusPainted(false);
 		sendButton.setForeground(Color.WHITE);
 		sendButton.setFont(textFont.deriveFont(Font.BOLD, 18));
-		sendButton.setBounds(308, 366, 45, 40);
+		sendButton.setThickBorders(false);
+		sendButton.setBounds(310, 367, 45, 40);
 		sendButton.addActionListener((actionEvent) -> {
 			final String currentText = textField.getText();
 			//	Ensure that text entry contains at least some non-space character(s).
