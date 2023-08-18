@@ -34,9 +34,9 @@ The application stays in the system tray, and all functions are done through the
 
 >![trayMenu](https://github.com/Minimunch57/Project-O.N.E.-Controller/assets/43156167/01454a7a-4b83-4c9d-ad46-583f3ac7014b)
 
-- GUI
+- GUI (as of `v1.4.2`)
 
->![GUI](https://github.com/Minimunch57/Project-O.N.E.-Controller/assets/43156167/7a1b9e4d-826b-40b1-940f-31f5f3087b47)
+>![GUI](https://github.com/Minimunch57/Project-O.N.E.-Controller/assets/43156167/de893eaf-a02f-4f42-be44-0ca0aeb3802e)
 
 __The components of the GUI break down as follows:__
 - ✅ Open Button
@@ -47,6 +47,10 @@ __The components of the GUI break down as follows:__
     - Unlocks the Project O.N.E. system, allowing for anyone to open the door.
 - 🔒 Lock Button
     - Locks the Project O.N.E. system, thereby requiring biometric identity verification to open the door.
+- 🟢 Enable Button
+    - Enables manual unlocks on the Project O.N.E. system, allowing someone to open the door or change the system lock state in person.
+- 🔴 Disable Button
+    - Disables manual unlocks on the Project O.N.E. system, preventing anyone from opening the door or changing the system lock state in person.
 - 🖥️ Console/Terminal Functionality with a Text Window, Command Line Entry, and an Enter Button
 
 Clicking anywhere outside of the GUI after it is opened will hide it.
