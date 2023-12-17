@@ -213,7 +213,12 @@ public class RemoteClient {
 	 * </ul>
 	 */
 	public void disconnectFromServer(boolean reconnect) {
+		//	Ensure the controller will not attempt to reconnect.
 		shouldReconnect = reconnect;
+		if(reconnectTimer.isRunning()) {
+			reconnectTimer.stop();
+		}
+		
 		webSocket.disconnect();
 	}
 	
@@ -239,6 +244,19 @@ public class RemoteClient {
 	 */
 	public boolean isConnecting() {
 		return webSocket.getState()==WebSocketState.CONNECTING;
+	}
+	
+	/**
+	 * <ul>
+	 * <p>	<b><i>isAttemptingConnection</i></b>
+	 * <p>	<code>public boolean isAttemptingConnection()</code>
+	 * <p>	Returns a <code>boolean</code> for whether or not this <tt>RemoteClient</tt> is attempting to connect to the server.
+	 * <p>	This method differs from <code>isConnecting()</code>. It also checks if reconnection attempts are being made or are planning to be made after a set time.
+	 * @return <code>true</code> if attempting to connect to the server; <code>false</code> otherwise.
+	 * </ul>
+	 */
+	public boolean isAttemptingConnection() {
+		return isConnecting() || reconnectTimer.isRunning();
 	}
 	
 	/**

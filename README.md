@@ -8,7 +8,7 @@
     <br><br>
     <img src="https://img.shields.io/badge/Project%20O.N.E.-3D556B?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAFVBMVEUAAAArO0rA6+s0SVw5T2M9VWv///8cYhYEAAAAAXRSTlMAQObYZgAAAFBJREFUGNOFj0EKwEAMAnU0//9yDy3bZXuoOQhDEJV8a3OwSYMBy9iEtgR7AaYESzIOhRlKJJl8QJnnmgOQv48tdIYV6g8wocNb7Kh+jjvnXykdAi0mh4iNAAAAAElFTkSuQmCC" alt="A Project O.N.E. Subproject">
     <img src="https://img.shields.io/badge/designed for-windows-blue?style=flat&logo=windows" alt="Designed for and Tested on Windows">
-    <img src="https://img.shields.io/badge/version-1.4.2-blue" alt="Controller Application v1.4.2">
+    <img src="https://img.shields.io/badge/version-1.4.3-blue" alt="Controller Application v1.4.3">
     <img src="https://img.shields.io/badge/language-java-F58219?logo=oracle" alt="Written in Java">
     <a target="_blank" href="https://github.com/Minimunch57/Project-O.N.E.-Controller/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-GPL%203.0-yellow" alt="GPL License v3.0"></a>
 </p>
@@ -34,7 +34,7 @@ The application stays in the system tray, and all functions are done through the
 
 >![trayMenu](https://github.com/Minimunch57/Project-O.N.E.-Controller/assets/43156167/01454a7a-4b83-4c9d-ad46-583f3ac7014b)
 
-- GUI (as of `v1.4.2`)
+- GUI (as of `v1.4.3`)
 
 >![GUI](https://github.com/Minimunch57/Project-O.N.E.-Controller/assets/43156167/de893eaf-a02f-4f42-be44-0ca0aeb3802e)
 

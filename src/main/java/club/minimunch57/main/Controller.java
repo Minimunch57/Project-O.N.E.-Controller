@@ -35,7 +35,7 @@ public class Controller {
 	
 	//	Static Return Values
 	/** A <code>float</code> for the current controller version. */
-	final public static String CURRENT_VERSION = "1.4.2";
+	final public static String CURRENT_VERSION = "1.4.3";
 	/** A <tt>String</tt> for the path to the application's file folder. */
 	@SuppressWarnings("unused")
 	final private static String APP_FOLDER_PATH = System.getProperty("user.home") + "/Minimunch57/ProjectONEController/";
@@ -299,7 +299,7 @@ public class Controller {
 				break;
 			}
 			case DISCONNECT: {
-				if(remoteClient.isConnected() || remoteClient.isConnecting()) {
+				if(remoteClient.isConnected() || remoteClient.isAttemptingConnection()) {
 					remoteClient.disconnectFromServer(false);
 				}
 				else {
@@ -336,32 +336,32 @@ public class Controller {
 	 * </ul>
 	 */
 	private boolean handleCommand(ControllerCommand command) {
-			//	Handle Commands
-			switch (command) {
-				//	Exit the application.
-				case EXIT: {
-					closeController();
-					break;
-				}
-				//	Call the garbage collector in an effort to free up some memory.
-				case GC: {
-					System.gc();
-					break;
-				}
-				//	Clear the output text/console window.
-				case CLEAR: {
-					controllerGUI.clearConsole();
-					break;
-				}
-				//	Get the current application version.
-				case VERSION: {
-					//	Handled in ControllerInterface.
-					break;
-				}
-				default:
-					return false;
+		//	Handle Commands
+		switch (command) {
+			//	Exit the application.
+			case EXIT: {
+				closeController();
+				break;
 			}
-			return true;
+			//	Call the garbage collector in an effort to free up some memory.
+			case GC: {
+				System.gc();
+				break;
+			}
+			//	Clear the output text/console window.
+			case CLEAR: {
+				controllerGUI.clearConsole();
+				break;
+			}
+			//	Get the current application version.
+			case VERSION: {
+				//	Handled in ControllerInterface.
+				break;
+			}
+			default:
+				return false;
+		}
+		return true;
 	}
 	
 	/**
