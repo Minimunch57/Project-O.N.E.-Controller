@@ -13,6 +13,13 @@
     <a target="_blank" href="https://github.com/Minimunch57/Project-O.N.E.-Controller/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-GPL%203.0-yellow" alt="GPL License v3.0"></a>
 </p>
 
+### Table of Contents
+- [Description](https://github.com/Minimunch57/Project-O.N.E.-Controller?tab=readme-ov-file#-description)
+- [Features](https://github.com/Minimunch57/Project-O.N.E.-Controller?tab=readme-ov-file#-features)
+- [Images](https://github.com/Minimunch57/Project-O.N.E.-Controller?tab=readme-ov-file#-images)
+- [Libraries](https://github.com/Minimunch57/Project-O.N.E.-Controller?tab=readme-ov-file#-libraries)
+- [Additional Information](https://github.com/Minimunch57/Project-O.N.E.-Controller?tab=readme-ov-file#%E2%84%B9%EF%B8%8F-additional-information)
+
 ### 📃 Description
 This application is a part of  __Project O.N.E.__
 
@@ -60,6 +67,11 @@ It can be re-opened using the `Open Interface` button in the Tray Menu.
 Please note that the images provided above may not be representative of the current product, as they may not be updated with each new version.
 
 *For more information regarding how this application interfaces with the rest of the project, please reference the Project O.N.E. information repository.*
+
+### 📖 Libraries
+- `nv-websocket-client` @ <a target="_blank" href="https://github.com/TakahikoKawasaki/nv-websocket-client">https://github.com/TakahikoKawasaki/nv-websocket-client</a>
+    - Licensed under <a target="_blank" href="https://github.com/Minimunch57/Project-O.N.E.-Controller/blob/main/LICENSE_Apache">Apache 2.0</a>
+    - No changes to library's source code.
 
 ### ℹ️ Additional Information
 The code for Project O.N.E. is currently designed to work with the one system that is currently in existence.
